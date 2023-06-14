@@ -1,21 +1,12 @@
 #include <iostream>
+#include <atomic>
 
 #include <qobject.hpp>
+#include <qtext.hpp>
 
 class Test : public QObject
 {
     Q_OBJECT
-public: 
-__pragma(warning(push)) 
-    static const QMetaObject staticMetaObject; 
-    virtual const QMetaObject *metaObject() const; 
-    virtual void *qt_metacast(const char *); 
-    virtual int qt_metacall(QMetaObject::Call, int, void **); 
-    static inline QString tr(const char *s, const char *c = nullptr, int n = -1) { return staticMetaObject.tr(s, c, n); } 
-private: 
-    static void qt_static_metacall(QObject *, QMetaObject::Call, int, void **); 
-__pragma(warning(pop)) 
-    struct QPrivateSignal { explicit QPrivateSignal() = default; };
 };
 
 
@@ -24,13 +15,22 @@ class Test2 : public Test
     Q_OBJECT
 };
 
-int main(int, char**){
+int main(int, char**)
+{
     std::cout << "Hello, from Example!\n";
 
     Test test;
 
     const char* name = test.staticMetaObject.className();
+
+    QString str1; 
+    QString str2;
+
+    //operator%<QStringBuilder<char16_t [5],QString>,char [4]>(const QStringBuilder<char16_t [5],QString> & a, const char[4] & b)
+    QString s3 = u"Pre:" % str1 % "End";
     
+    auto ai = std::atomic<int>(42); // error
+
     std::cout << name << std::endl;
 }
 
