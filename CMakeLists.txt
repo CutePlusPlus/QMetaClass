@@ -245,6 +245,38 @@ target_include_directories(QMetaClass
 
 add_subdirectory(example)
 
+#install the .cmake file to system default path (CMAKE_INSTALL_PREFIX), in windows: C:/Program Files/QMetaClass
+set(CONF_INCLUDE_DIRS "")
+option(INSTALL_DEBUG_DEV "Debug development installation" ON)
+if (INSTALL_DEBUG_DEV)
+    #QMetaClassConfig.cmake will be insalled (to default or --prefix folder)
+    #in its content, QMetaClass_INCLUDE_DIRS will point to this development folder for headers and libs
+    #so include or lib need not be copied and every new development version will be found by applications.
+    set(CONF_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
+
+    #if not, ${CONF_INCLUDE_DIRS} will be "" and re-populated inside QMetaClassConfig.cmake.
+    #in QMetaClassConfig.cmake content, QMetaClass_INCLUDE_DIRS will point to default or --prefix folder
+    #include and lib will be installed(copied) there too.
+    #after that, this development folder can be deleted
+endif(INSTALL_DEBUG_DEV)
+message(STATUS "include is set to be installed: " ${CONF_INCLUDE_DIRS})
+configure_file(cmake/QMetaClassConfig.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/cmake/QMetaClassConfig.cmake @ONLY)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/QMetaClassConfig.cmake DESTINATION lib/cmake/QMetaClass)
+
+#install the .lib .dll .so .a file
+#install a Debug buidl: cmake --install . --config=Debug
+if (INSTALL_DEBUG_DEV)
+    install(TARGETS QMetaClass
+        #to current workspace
+        DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/lib
+    )        
+else(INSTALL_DEBUG_DEV)
+    install(TARGETS QMetaClass
+        #to system default lib path
+        LIBRARY DESTINATION lib
+    )  
+endif(INSTALL_DEBUG_DEV)
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)

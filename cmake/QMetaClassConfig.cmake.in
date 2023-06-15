@@ -1,0 +1,9 @@
+# - Config file for the QMetaClass package
+# It defines the following variables
+#  CONF_INCLUDE_DIRS - include directories, it can be debug directory or final installation directory
+#  CONF_LIBRARIES    - libraries to link against
+#  CONF_EXECUTABLE   - the bar executable
+
+# Compute paths
+set(QMetaClass_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@/include")
+set(QMetaClass_LIBRARIES "@CONF_INCLUDE_DIRS@/lib")
